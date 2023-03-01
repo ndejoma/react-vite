@@ -1,5 +1,7 @@
 {
-    "extends": [
-      "react-app"
-    ]
+  "extends": ["react-app"],
+  "rules": {
+    "no-undef": "warn",
+    "no-unused-vars": "warn"
   }
+}

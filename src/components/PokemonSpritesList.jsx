@@ -1,3 +1,12 @@
-export default function PokemonSpritesList() {
-	return <section></section>;
+import reactUiid from "react-uuid";
+import PokemonSprite from "@/components/PokemonSprite";
+
+export default function PokemonSpritesList({ pokemonSpecies = [] }) {
+  return (
+    <div className="grid gap-x-6 gap-y-8 xs:grid-cols-2 lg:grid-cols-4 ">
+      {pokemonSpecies?.map(({ name, url }) => {
+        return <PokemonSprite key={reactUiid()} name={name} spriteUrl={url} />;
+      })}
+    </div>
+  );
 }
