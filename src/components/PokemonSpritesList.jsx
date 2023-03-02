@@ -1,4 +1,3 @@
-import reactUiid from "react-uuid";
 import PokemonSprite from "@/components/PokemonSprite";
 
 export default function PokemonSpritesList({ pokemonSpecies = [] }) {
@@ -8,7 +7,8 @@ export default function PokemonSpritesList({ pokemonSpecies = [] }) {
         return (
           <PokemonSprite
             idx={idx}
-            key={reactUiid()}
+            // key={uuid()}
+            key={name}
             name={name}
             spriteUrl={url}
           />

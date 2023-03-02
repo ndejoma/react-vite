@@ -12,7 +12,7 @@ export default function PokemonSprite({ name = "", spriteUrl = "" }) {
           <img
             loading="lazy"
             alt={name}
-            src={`https://img.pokemondb.net/sprites/home/normal/2x/avif/${name}.avif`}
+            src={`https://img.pokemondb.net/artwork/avif/${name}.avif`}
             width={112}
             height={112}
           />

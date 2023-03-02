@@ -7,7 +7,6 @@ const START_PAGE_IDX = 0;
 const PAGE_ITEMS_LIMIT = 20;
 
 function getReqKey(pageIdx, prevPageData) {
-  console.log(pageIdx, "The page index");
   if (+pageIdx === 0 && !prevPageData) {
     return `https://pokeapi.co/api/v2/pokemon-species/?offset=${START_PAGE_IDX}&limit=${PAGE_ITEMS_LIMIT}`;
   }
@@ -16,7 +15,7 @@ function getReqKey(pageIdx, prevPageData) {
       pageIdx * 20
     }&limit=${PAGE_ITEMS_LIMIT}`;
   }
-  //if there it is not the first request or the previousPaga data has next as null
+  //if there it is no the first request or the previousPage data has next as null
   return null;
 }
 
@@ -36,7 +35,7 @@ function App() {
   const hasMoreDataToLoad =
     data?.length > 0 && Boolean(data[data.length - 1]?.next);
   const isEmpty = pokemonSpecies?.length === 0;
-  console.log(data[size - 1], "WHAT IS THIS");
+  // console.log(data && data[size - 1]  === "undefined", "WHAT IS THIS");
   const isLoadingMore =
     isLoading || (size > 0 && data && typeof data[size - 1] === "undefined");
   const availableSpeciesNo = data ? data[data.length - 1]?.count : 0;
@@ -74,12 +73,8 @@ function App() {
               Search species
             </label>
             <input
-              // onChange={e => {
-              // 	setSpriteOffset(e.target.value);
-              // }}
               type="text"
               className="border block mb-10 py-2 rounded-md px-2 border-gray-400 focus:outline-primary focus:border-primary"
-              // value={spriteOffset}
             />
           </div>
           {!isEmpty ? (
@@ -116,7 +111,7 @@ function App() {
               {" "}
               <h3 className="text-2xl font-medium text-red-500">
                 {" "}
-                Ooops, There are no pokemon speices to show
+                Ooops, There are no pokemon species to show
               </h3>
             </div>
           )}
