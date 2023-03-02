@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "prepare": "husky install"
   },
   "dependencies": {
     "classnames": "^2.3.2",
@@ -22,10 +23,16 @@
     "autoprefixer": "^10.4.13",
     "eslint": "^8.35.0",
     "eslint-config-react-app": "^7.0.1",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.1.2",
     "postcss": "^8.4.21",
     "prettier": "^2.8.4",
     "tailwindcss": "^3.2.7",
     "vite": "^4.1.0",
     "vite-plugin-eslint": "^1.8.1"
+  },
+  "lint-staged": {
+    "*.js": "eslint --cache --fix",
+    "*.{js,css,md,jsx,json,html}": "prettier --write"
   }
 }
