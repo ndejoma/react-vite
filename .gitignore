@@ -130,3 +130,6 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# Ignore Vite timestamp files
+vite.config.js.timestamp-*.mjs
