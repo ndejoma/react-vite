@@ -7,7 +7,6 @@ const START_PAGE_IDX = 0;
 const PAGE_ITEMS_LIMIT = 20;
 
 function getReqKey(pageIdx, prevPageData) {
-  console.log(pageIdx);
   if (+pageIdx === 0 && !prevPageData) {
     return `https://pokeapi.co/api/v2/pokemon-species/?offset=${START_PAGE_IDX}&limit=${PAGE_ITEMS_LIMIT}`;
   }
@@ -22,10 +21,8 @@ function getReqKey(pageIdx, prevPageData) {
 
 function App() {
   //fetch the data infinite
-  const { data, isLoading, isValidating, size, setSize } = useSWRInfinite(
-    getReqKey,
-    fetchJsonData
-  );
+  const { data, error, isLoading, isValidating, size, setSize } =
+    useSWRInfinite(getReqKey, fetchJsonData);
   //the state calculated from existing states
   // the pokemon species data transformed and flatten to include just the results
   const pokemonSpecies = data ? data.flatMap(({ results }) => results) : [];
@@ -38,7 +35,8 @@ function App() {
   const isEmpty = pokemonSpecies?.length === 0;
   // console.log(data && data[size - 1]  === "undefined", "WHAT IS THIS");
   const isLoadingMore =
-    isLoading || (size > 0 && data && typeof data[size - 1] === 'undefined');
+    !error &&
+    (isLoading || (size > 0 && data && typeof data[size - 1] === 'undefined'));
   const availableSpeciesNo = data ? data[data.length - 1]?.count : 0;
   const loadSpeciesNo = pokemonSpecies.length;
 
@@ -67,7 +65,6 @@ function App() {
         </nav>
       </header>
       <main className='min-h-screen max-w-screen-xl mx-auto px-6'>
-        {/* <PokemonSprite /> */}
         <section className='py-12'>
           <div>
             <label className='text-2xl tracking-tight font-semibold mb-1.5 block'>
@@ -78,7 +75,15 @@ function App() {
               className='border block mb-10 py-2 rounded-md px-2 border-gray-400 focus:outline-primary focus:border-primary'
             />
           </div>
-          {!isEmpty ? (
+          {error ? (
+            <div className='py-10 text-center'>
+              {' '}
+              <h3 className='text-2xl font-medium text-red-500'>
+                {' '}
+                Error: {error?.message}
+              </h3>
+            </div>
+          ) : !isEmpty ? (
             <>
               <PokemonSpritesList pokemonSpecies={pokemonSpecies} />
               <div className='mt-6 ml-2'>
@@ -95,7 +100,11 @@ function App() {
                   }}
                   className='bg-primary py-4 px-10 font-bold rounded-md disabled:bg-primary/50 disabled:cursor-not-allowed text-white focus:outline-rose-500 focus:outline-offset-2 focus-visible:outline-rose-500 focus-visible:outline-offset-2 hover:bg-primary/90 hover:scale-[.98]  transition-transform duration-[50ms] inline-flex items-center justify-center gap-2'
                 >
-                  {!hasMoreDataToLoad ? (
+                  {isValidating ? (
+                    <>
+                      <Spinner /> Validating
+                    </>
+                  ) : !hasMoreDataToLoad ? (
                     <>No more pokemon species</>
                   ) : isLoadingMore ? (
                     <>
@@ -104,6 +113,7 @@ function App() {
                   ) : (
                     <>Load more</>
                   )}
+                  {}
                 </button>
               </div>
             </>
