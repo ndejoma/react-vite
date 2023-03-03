@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import cn from 'classnames';
 
-const Spinner = memo(function Spinner({ className = '' }) {
+const Spinner = memo(function ({ className = '' }) {
   return (
     <svg
       className={cn('animate-spin h-5 w-5 text-white', className)}
