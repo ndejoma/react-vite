@@ -100,11 +100,7 @@ function App() {
                   }}
                   className='bg-primary py-4 px-10 font-bold rounded-md disabled:bg-primary/50 disabled:cursor-not-allowed text-white focus:outline-rose-500 focus:outline-offset-2 focus-visible:outline-rose-500 focus-visible:outline-offset-2 hover:bg-primary/90 hover:scale-[.98]  transition-transform duration-[50ms] inline-flex items-center justify-center gap-2'
                 >
-                  {isValidating ? (
-                    <>
-                      <Spinner /> Validating
-                    </>
-                  ) : !hasMoreDataToLoad ? (
+                  {!hasMoreDataToLoad ? (
                     <>No more pokemon species</>
                   ) : isLoadingMore ? (
                     <>
