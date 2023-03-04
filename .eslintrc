@@ -1,7 +1,13 @@
 {
   "extends": ["react-app"],
+  "plugins": [
+    // ...
+    "react-hooks"
+  ],
   "rules": {
     "no-undef": "warn",
-    "no-unused-vars": "warn"
+    "no-unused-vars": "warn",
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn"
   }
 }
