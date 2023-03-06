@@ -1,7 +1,9 @@
+import { useEffect } from 'react';
 import PokemonSpritesList from '@/components/PokemonSpritesList';
 import Spinner from '@/components/icons/Spinner';
 import fetchJsonData from '@/utils/fetchJsonData';
 import useSWRInfinite from 'swr/infinite';
+import { useInView } from 'react-intersection-observer';
 
 const START_PAGE_IDX = 0;
 const PAGE_ITEMS_LIMIT = 20;
@@ -20,6 +22,7 @@ function getReqKey(pageIdx, prevPageData) {
 }
 
 function App() {
+  const { ref, entry, inView } = useInView({ rootMargin: '400px' });
   //fetch the data infinite
   const { data, error, isLoading, isValidating, size, setSize } =
     useSWRInfinite(getReqKey, fetchJsonData);
@@ -39,6 +42,15 @@ function App() {
     (isLoading || (size > 0 && data && typeof data[size - 1] === 'undefined'));
   const availableSpeciesNo = data ? data[data.length - 1]?.count : 0;
   const loadSpeciesNo = pokemonSpecies.length;
+
+  //effects
+  useEffect(() => {
+    if (inView && hasMoreDataToLoad) {
+      setSize(size + 1);
+    }
+    //adding size as a dependecy will make the component re-render infinitely, ignore the deps rule
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [entry]);
 
   return (
     <>
@@ -75,15 +87,7 @@ function App() {
               className='border block mb-10 py-2 rounded-md px-2 border-gray-400 focus:outline-primary focus:border-primary'
             />
           </div>
-          {error ? (
-            <div className='py-10 text-center'>
-              {' '}
-              <h3 className='text-2xl font-medium text-red-500'>
-                {' '}
-                Error: {error?.message}
-              </h3>
-            </div>
-          ) : !isEmpty ? (
+          {!isEmpty ? (
             <>
               <PokemonSpritesList pokemonSpecies={pokemonSpecies} />
               <div className='mt-6 ml-2'>
@@ -92,13 +96,24 @@ function App() {
                   <strong>{availableSpeciesNo}</strong> pokemon species
                 </p>
               </div>
-              <div className='flex items-center justify-center mt-12'>
+              <div className='py-10 flex items-center justify-center text-lg font-semibold'>
+                {isLoadingMore && (
+                  <div>
+                    <Spinner className='text-gray-700 h-8 w-8' /> Loading
+                  </div>
+                )}
+                {!hasMoreDataToLoad && (
+                  <div className='text-red-500'>
+                    {' '}
+                    <p>No more data to load</p>
+                  </div>
+                )}
+              </div>
+              <div className='flex items-center justify-center mt-0'>
                 <button
+                  ref={ref}
                   disabled={isLoading || isValidating || !hasMoreDataToLoad}
-                  onClick={() => {
-                    setSize(size + 1);
-                  }}
-                  className='bg-primary py-4 px-10 font-bold rounded-md disabled:bg-primary/50 disabled:cursor-not-allowed text-white focus:outline-rose-500 focus:outline-offset-2 focus-visible:outline-rose-500 focus-visible:outline-offset-2 hover:bg-primary/90 hover:scale-[.98]  transition-transform duration-[50ms] inline-flex items-center justify-center gap-2'
+                  className='bg-primary py-4 px-10 font-bold rounded-md disabled:bg-primary/50 disabled:cursor-not-allowed text-white focus:outline-rose-500 focus:outline-offset-2 focus-visible:outline-rose-500 focus-visible:outline-offset-2 hover:bg-primary/90 hover:scale-[.98]  transition-transform duration-[50ms] inline-flex items-center justify-center gap-2 invisible'
                 >
                   {!hasMoreDataToLoad ? (
                     <>No more pokemon species</>

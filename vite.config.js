@@ -1,6 +1,6 @@
+import path from 'node:path';
 import { defineConfig } from 'vite';
 import reactSwc from '@vitejs/plugin-react-swc';
-import path from 'node:path';
 import eslint from 'vite-plugin-eslint';
 import removeConsole from 'vite-plugin-remove-console';
 
